@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ECD360 — Early Childhood Development Tracker by Parentzo">
+  <title>ECD360 — by Parentzo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EQCVF56972"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EQCVF56972');
+  </script>
+</head>
+
+<body>
+
+  <!-- ===================== NAV ===================== -->
+  <nav id="main-nav">
+    <div class="nav-inner">
+      <div class="nav-brand">
+        <img src="https://i.postimg.cc/Pp39NgZd/P-Icon.png" alt="Parentzo" class="brand-icon-img">
+        <span class="brand-text">ECD360</span>
+      </div>
+      <div class="nav-links" id="nav-links">
+        <a href="#" class="nav-link" data-view="children" id="nav-children">My Children</a>
+      </div>
+      <div class="nav-status">
+        <div id="nav-guest-area" class="nav-guest-area">
+          <button class="btn btn-primary btn-nav" id="btn-nav-login">Login</button>
+        </div>
+        <div id="nav-user-area" class="nav-user-area hidden">
+          <span class="nav-user-badge" id="nav-user-name">👤</span>
+          <button class="btn btn-ghost btn-nav" id="btn-logout">Logout</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===================== LOGIN VIEW (returning users) ===================== -->
+  <main id="view-auth" class="view">
+    <div class="auth-page">
+      <div class="auth-card">
+        <div class="auth-logo">
+          <img src="https://i.postimg.cc/Pp39NgZd/P-Icon.png" alt="Parentzo" style="width:56px;height:56px;object-fit:contain;margin-bottom:12px;">
+          <h1 class="auth-title">Welcome back to <span class="gradient-text">ECD360</span></h1>
+          <p class="auth-subtitle">Login with your mobile number</p>
+        </div>
+        <div id="login-step-phone">
+          <div class="auth-form-group">
+            <label for="login-phone">Phone Number</label>
+            <input type="tel" id="login-phone" placeholder="e.g. +91 98765 43210" autocomplete="tel">
+          </div>
+          <button class="btn btn-primary auth-submit-btn" id="btn-request-otp">
+            Get OTP
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+        </div>
+        <div id="login-step-otp" class="hidden">
+          <div class="otp-info">
+            <span class="otp-icon">📱</span>
+            <p id="otp-sent-msg">OTP sent to your phone</p>
+          </div>
+          <div class="auth-form-group">
+            <label for="login-otp">Enter 6-Digit OTP</label>
+            <input type="text" id="login-otp" placeholder="000000" maxlength="6" autocomplete="one-time-code" inputmode="numeric">
+          </div>
+          <button class="btn btn-primary auth-submit-btn" id="btn-verify-otp">
+            Verify &amp; Login
+            <svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div id="resend-otp-wrap" style="text-align:center;margin-top:10px;"></div>
+          <button class="btn btn-ghost auth-back-btn" id="btn-back-phone">← Change number</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== DASHBOARD VIEW ===================== -->
+  <main id="view-dashboard" class="view active">
+    <section class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">Understand Your Child's<br><span class="gradient-text">Development Clearly</span></h1>
+        <p class="hero-sub">Evidence-based early childhood development tracking across 5 key domains. Simple observations, meaningful insights.</p>
+        <button class="btn btn-primary btn-lg" id="hero-start-btn">
+          <span>Start Observation</span>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12m0 0l-4-4m4 4l-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+      <div class="hero-visual">
+        <div class="domain-grid">
+          <div class="domain-card ui-float-1" data-domain="COG"><span>🧠</span><small>Cognitive</small></div>
+          <div class="domain-card ui-float-2" data-domain="SE"><span>❤️</span><small>Social &amp; Emotional Skills</small></div>
+          <div class="domain-card ui-float-3" data-domain="LANG" style="grid-column: span 2"><span>💬</span><small>Language &amp; Communication</small></div>
+          <div class="domain-card ui-float-4" data-domain="PHY"><span>🏃</span><small>Physical Development</small></div>
+          <div class="domain-card ui-float-5" data-domain="ADP"><span>🎯</span><small>Adaptive Skills</small></div>
+        </div>
+      </div>
+    </section>
+    <section class="info-cards">
+      <div class="info-card"><div class="info-card-icon">📋</div><h3>Observe</h3><p>Answer simple prompts about your child's everyday behaviour and development — no tests, no pressure.</p></div>
+      <div class="info-card"><div class="info-card-icon">🔍</div><h3>Understand</h3><p>See clear developmental insights across five developmental domains of Early Childhood Development.</p></div>
+      <div class="info-card"><div class="info-card-icon">🤝</div><h3>Support</h3><p>Identify areas that may need attention and know what to do next — no jargon, no labels, just actionable next steps.</p></div>
+    </section>
+  </main>
+
+  <!-- ===================== STEP: CAREGIVER NAME ===================== -->
+  <main id="view-caregiver-name" class="view">
+    <div class="onboarding-page">
+      <div class="onboarding-card">
+        <div class="onboarding-step-indicator">Step 1 of 3</div>
+        <h2>Hello! What's your name?</h2>
+        <p style="margin-bottom:24px;">We'll use this to personalise your experience.</p>
+        <div class="form-group">
+          <label for="caregiver-name-input">Your Name</label>
+          <input type="text" id="caregiver-name-input" placeholder="e.g. Priya" autocomplete="given-name">
+        </div>
+        <button class="btn btn-primary onboarding-next-btn" id="btn-caregiver-name-next">
+          Continue →
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== STEP: CHILD INFO ===================== -->
+  <main id="view-child-info" class="view">
+    <div class="onboarding-page">
+      <div class="onboarding-card">
+        <div class="onboarding-step-indicator">Step 2 of 3</div>
+        <h2>Tell us about your child</h2>
+        <p style="margin-bottom:24px;">We'll use their age to find the right questions.</p>
+        <div class="form-group">
+          <label for="child-name-input">Child's Pet Name</label>
+          <input type="text" id="child-name-input" placeholder="e.g. Aanya" autocomplete="off">
+        </div>
+        <div class="form-group" style="margin-top:16px;">
+          <label for="child-dob-input">Date of Birth</label>
+          <input type="date" id="child-dob-input">
+        </div>
+        <div class="onboarding-actions">
+          <button class="btn btn-ghost" id="btn-child-info-back">← Back</button>
+          <button class="btn btn-primary" id="btn-child-info-next">Continue →</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== STEP: DOMAIN CHOICE ===================== -->
+  <main id="view-domain-choice" class="view">
+    <div class="onboarding-page">
+      <div class="onboarding-card domain-choice-card">
+        <div class="onboarding-step-indicator">Step 3 of 3</div>
+        <h2>Choose a domain to explore</h2>
+        <p id="domain-choice-subtitle" style="margin-bottom:28px;">Pick one area you'd like to observe today.</p>
+        <div class="domain-choice-grid" id="domain-choice-grid">
+          <button class="domain-choice-btn" data-domain="COG">
+            <span class="domain-choice-emoji">🧠</span>
+            <span class="domain-choice-label">Cognitive</span>
+            <span class="domain-choice-desc">Memory, problem-solving & learning</span>
+          </button>
+          <button class="domain-choice-btn" data-domain="LANG">
+            <span class="domain-choice-emoji">💬</span>
+            <span class="domain-choice-label">Language & Communication</span>
+            <span class="domain-choice-desc">Speech, words & gestures</span>
+          </button>
+          <button class="domain-choice-btn" data-domain="PHY">
+            <span class="domain-choice-emoji">🏃</span>
+            <span class="domain-choice-label">Physical Development</span>
+            <span class="domain-choice-desc">Motor skills & body coordination</span>
+          </button>
+          <button class="domain-choice-btn" data-domain="SE">
+            <span class="domain-choice-emoji">❤️</span>
+            <span class="domain-choice-label">Social & Emotional</span>
+            <span class="domain-choice-desc">Feelings, relationships & empathy</span>
+          </button>
+          <button class="domain-choice-btn" data-domain="ADP">
+            <span class="domain-choice-emoji">🎯</span>
+            <span class="domain-choice-label">Adaptive Skills</span>
+            <span class="domain-choice-desc">Self-care & daily routines</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ===================== CHILDREN VIEW (returning users) ===================== -->
+  <main id="view-children" class="view">
+    <div class="children-page-header">
+      <div>
+        <h2>My Children</h2>
+        <p class="page-subtitle" id="children-greeting"></p>
+      </div>
+      <button class="btn btn-primary" id="btn-show-add-child">+ Add Child</button>
+    </div>
+    <div id="add-child-form" class="add-child-card hidden">
+      <h3>Add a New Child</h3>
+      <div class="add-child-fields">
+        <div class="form-group">
+          <label for="new-child-name">Child's Name (Pet Name)</label>
+          <input type="text" id="new-child-name" placeholder="e.g. Aanya" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="new-child-dob">Date of Birth</label>
+          <input type="date" id="new-child-dob">
+        </div>
+      </div>
+      <div class="add-child-actions">
+        <button class="btn btn-primary" id="btn-save-child">Save Child</button>
+        <button class="btn btn-ghost" id="btn-cancel-add-child">Cancel</button>
+      </div>
+    </div>
+    <div id="children-grid" class="children-grid"></div>
+    <div id="children-empty" class="children-empty hidden">
+      <span class="empty-icon">👶</span>
+      <h3>No children added yet</h3>
+      <p>Add your first child to begin tracking their development.</p>
+      <button class="btn btn-primary" id="btn-add-first-child">+ Add Your First Child</button>
+    </div>
+  </main>
+
+  <!-- ===================== OBSERVE VIEW ===================== -->
+  <main id="view-observe" class="view">
+
+    <!-- Gentle Note popup-style step -->
+    <section class="observe-step hidden" id="step-gentle-note">
+      <div class="prep-screen-card">
+        <h2>Gentle Note</h2>
+        <p>Every child develops differently, and this assessment is designed to help parents observe development with more clarity — not judgment.</p>
+        <p>There are no right or wrong answers. Every child grows at their own pace. The more honestly you respond based on everyday observations, the more meaningful the insights it shows.</p>
+        <button class="btn btn-primary prep-next-btn" id="btn-gentle-note-next">Continue →</button>
+      </div>
+    </section>
+
+    <!-- Breathing exercise step -->
+    <section class="observe-step hidden" id="step-breathing">
+      <div class="prep-screen-card">
+        <h2>Before You Begin</h2>
+        <p>Take a quiet moment before answering. A parent's emotions and stress can also influence observations.</p>
+        <p>Try a simple box breathing exercise:</p>
+        <ul class="breath-list">
+          <li>Inhale for 4 seconds</li>
+          <li>Hold for 4 seconds</li>
+          <li>Exhale for 4 seconds</li>
+          <li>Pause for 4 seconds</li>
+        </ul>
+        <p>Repeat gently a few times if needed.</p>
+        <button class="btn btn-primary prep-next-btn" id="btn-breathing-next">I'm Ready →</button>
+      </div>
+    </section>
+
+    <!-- Prompts step -->
+    <section class="observe-step hidden" id="step-prompts">
+      <div class="step-header">
+        <h2>Observation Prompts</h2>
+        <p id="prompts-subtitle" class="prompts-child-context">Answer each prompt based on what you observe day-to-day.</p>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar" id="prompt-progress"></div>
+        <span class="progress-label" id="prompt-progress-label">0 / 0</span>
+      </div>
+      <div id="prompts-container"></div>
+      <div class="prompts-nav">
+        <button class="btn btn-ghost" id="btn-prev-prompt" disabled>← Previous</button>
+        <button class="btn btn-primary" id="btn-next-prompt">Next →</button>
+        <button class="btn btn-accent hidden" id="btn-submit-responses">Submit Responses ✓</button>
+      </div>
+    </section>
+
+    <!-- Submitting / collect email+phone -->
+    <section class="observe-step hidden" id="step-collect-contact">
+      <div class="onboarding-page">
+        <div class="onboarding-card">
+          <h2>Almost there! 🎉</h2>
+          <p style="margin-bottom:24px;">Enter your contact details to view the results and save your progress.</p>
+          <div class="form-group">
+            <label for="contact-email">Email Address</label>
+            <input type="email" id="contact-email" placeholder="e.g. priya@email.com" autocomplete="email">
+          </div>
+          <div class="form-group" style="margin-top:16px;">
+            <label for="contact-phone">Phone Number</label>
+            <input type="tel" id="contact-phone" placeholder="e.g. +91 98765 43210" autocomplete="tel">
+          </div>
+          <button class="btn btn-primary" id="btn-contact-submit" style="width:100%;margin-top:24px;">
+            View My Results →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Processing -->
+    <section class="observe-step hidden" id="step-submitting">
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <h2 id="submitting-title">Processing Responses...</h2>
+        <p id="submitting-subtitle">Please wait while we analyse the responses.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== RESULTS VIEW ===================== -->
+  <main id="view-results" class="view">
+    <section id="results-content" class="hidden">
+      <div class="results-header">
+        <h2 class="results-ready-heading"><span class="results-tick">✅</span> Insights Ready</h2>
+        <p>Check your child's development state below.</p>
+        <p id="results-child-info" style="font-size:0.85rem;color:var(--text-muted);margin-top:8px;"></p>
+      </div>
+
+      <div class="results-grid" id="results-grid"></div>
+
+      <div class="results-legend">
+        <h3>What do these mean?</h3>
+        <div class="legend-items">
+          <div class="legend-item">
+            <span class="legend-pill group-ACT_DEV">Actively Developing</span>
+            <p>Your child is showing expected skills for their age in this domain. Continue supporting your child's Early Childhood Development.</p>
+          </div>
+          <div class="legend-item">
+            <span class="legend-pill group-STS">Still Taking Shape</span>
+            <p>Skills are emerging but not in consistent form. Stimulate the skills and pathways to strengthen development through play and daily activities.</p>
+          </div>
+          <div class="legend-item">
+            <span class="legend-pill group-NEEDS_ATTN">Needs Attention</span>
+            <p>Developments are not showing consistently. Increase focused activities in this area and observe changes over time.</p>
+          </div>
+          <div class="legend-item">
+            <span class="legend-pill group-SEEK_SUPP">Seek Support</span>
+            <p>It may help to speak with a child development professional. Consult a paediatrician/professional to understand how to support development in this domain.</p>
+          </div>
+          <div class="legend-item">
+            <span class="legend-pill group-INCOMPLETE">Incomplete</span>
+            <p>Not enough responses to classify this domain.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Three action buttons -->
+      <div class="results-action-buttons">
+        <button class="btn btn-primary results-action-btn" id="btn-action-plan">
+          📋 Personalized Action Plan
+        </button>
+        <button class="btn btn-primary results-action-btn" id="btn-connect-expert">
+          👩‍⚕️ Connect with a Child Expert
+        </button>
+        <button class="btn btn-ghost results-action-btn" id="btn-learn-ecd">
+          📚 Learn More About ECD
+        </button>
+      </div>
+
+      <!-- Try another domain -->
+      <div style="text-align:center;margin-top:24px;">
+        <button class="btn btn-ghost" id="btn-try-another-domain">
+          🔄 Try Another Domain
+        </button>
+      </div>
+
+      <div class="results-actions" style="margin-top:2rem;display:flex;gap:16px;">
+        <button class="btn btn-ghost" id="btn-download-report">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          Download Report
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== POPUPS ===================== -->
+
+  <!-- Acknowledged popup (Action Plan + Connect Expert) -->
+  <div id="popup-acknowledged" class="popup-overlay hidden">
+    <div class="popup-card">
+      <button class="popup-close" id="btn-close-acknowledged">✕</button>
+      <div class="popup-icon">✅</div>
+      <h3>Request Acknowledged</h3>
+      <p>Your request has been acknowledged. We will connect with you in a few days.</p>
+      <button class="btn btn-primary" id="btn-close-acknowledged-btn">Got it</button>
+    </div>
+  </div>
+
+  <!-- Learn ECD popup -->
+  <div id="popup-learn-ecd" class="popup-overlay hidden">
+    <div class="popup-card">
+      <button class="popup-close" id="btn-close-learn-ecd">✕</button>
+      <div class="popup-icon">📚</div>
+      <h3>Learn More About ECD</h3>
+      <p>Follow Parentzo on our platforms to access tips, resources, and expert insights on early childhood development.</p>
+      <div class="popup-link-buttons">
+        <a href="https://www.instagram.com/byparentzo/?utm_source=ig_web_button_share_sheet" target="_blank" rel="noopener noreferrer" class="btn btn-primary popup-link-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          Follow on Instagram
+        </a>
+        <a href="https://whatsapp.com/channel/0029VbBmDQy5Ui2bvSyqTh1a" target="_blank" rel="noopener noreferrer" class="btn popup-link-btn popup-whatsapp-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Follow on WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer id="main-footer">
+    <p>ECD360 by Parentzo &copy; 2026 &middot; Beta testing only &middot; All observations are private and stored securely.</p>
+    <p class="footer-disclaimer">Warning: This website and the information it contains is not intended as a substitute for professional consultation with a qualified practitioner.</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.1/firebase-auth-compat.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>
