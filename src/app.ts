@@ -24,7 +24,8 @@ app.use(express.json());
 app.use(cookieParser()); // Parse httpOnly session cookies
 
 // ─── Static frontend ─────────────────────────────────────────────────────────
-app.use(express.static(path.join(__dirname, "..", "public")));
+// Static files — process.cwd() works in both dev and prod builds
+app.use(express.static(path.resolve(process.cwd(), "public")));
 
 // ─── Global rate limiting ─────────────────────────────────────────────────────
 const globalLimiter = rateLimit({
