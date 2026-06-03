@@ -898,3 +898,21 @@ button, .btn, .response-option, .auth-tab, .nav-link,
   .domain-choice-grid .domain-choice-btn:last-child:nth-child(odd) { grid-column: span 1; }
   .results-action-buttons { max-width: 100%; }
 }
+
+/* ── Results buttons — all 5 fully aligned ── */
+.results-action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 28px;
+  width: 100%;
+  max-width: 480px;
+}
+.results-action-btn {
+  width: 100% !important;
+  justify-content: center !important;
+  padding: 13px 24px !important;
+  font-size: 0.95rem !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
