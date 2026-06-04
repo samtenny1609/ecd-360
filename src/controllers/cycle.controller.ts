@@ -378,6 +378,14 @@ export const startGuestCycle = async (req: Request, res: Response): Promise<Resp
 
     const ageInMonths = calculateAgeInMonths(date_of_birth, new Date());
 
+    // Age gate — reject if child is under 3 months or over 72 months
+    if (ageInMonths < 3) {
+      return res.status(400).json({ error: "ECD360 supports children aged 3 months and above." });
+    }
+    if (ageInMonths > 72) {
+      return res.status(400).json({ error: "ECD360 covers development up to 72 months." });
+    }
+
     // Create a guest child row (no caregiver_id yet — will be linked after contact collection)
     const childRow = await brCreate(TABLE_CHILDREN, {
       pet_name,

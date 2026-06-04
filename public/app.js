@@ -901,7 +901,8 @@
       if (!name) { toast("Please enter your child's name.", "error"); return; }
       if (!dob) { toast("Please enter your child's date of birth.", "error"); return; }
       const age = calculateAgeInMonths(dob, new Date());
-      if (age < 0 || age > 72) { toast("Please enter a valid date of birth (0–72 months).", "error"); return; }
+      if (age < 3) { toast("ECD360 is designed for children aged 3 months and above. Please check the date of birth.", "error"); return; }
+      if (age > 72) { toast("ECD360 covers development up to 72 months. Please check the date of birth.", "error"); return; }
 
       guestChildName = name;
       guestChildDob = dob;
