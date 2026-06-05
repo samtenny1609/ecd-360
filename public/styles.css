@@ -916,3 +916,55 @@ button, .btn, .response-option, .auth-tab, .nav-link,
   text-align: center !important;
   box-sizing: border-box !important;
 }
+
+/* ── How To Improve button ─────────────────────────────────────────────── */
+.how-to-improve-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(107, 79, 160, 0.1);
+  border: 1.5px solid rgba(107, 79, 160, 0.25);
+  border-radius: 20px;
+  color: var(--accent-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+.how-to-improve-btn:hover {
+  background: rgba(107, 79, 160, 0.18);
+  border-color: rgba(107, 79, 160, 0.45);
+  transform: translateY(-1px);
+}
+.hti-chevron {
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+
+/* ── Result card — always expanded, no collapse ────────────────────────── */
+.result-card .result-card-body {
+  display: block !important;
+  max-height: none !important;
+  overflow: visible !important;
+  opacity: 1 !important;
+}
+.result-card-header {
+  cursor: default !important;
+}
+
+/* ── Domain done tick ──────────────────────────────────────────────────── */
+.domain-done-tick {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 1.4rem;
+  color: #2E7D32;
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+}
+.domain-choice-btn {
+  position: relative;
+}
