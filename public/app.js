@@ -118,6 +118,8 @@
 
   // Observation state
   let activeCycleId = null;
+  let resolvedCaregiverId = null;  // set after contact collection
+  let resolvedChildId = null;      // set after guest child creation
   let chosenDomain = null;        // single domain chosen this session
   let currentPromptIndex = 0;
   let prompts = [];
@@ -413,24 +415,12 @@
       const d = btn.dataset.domain;
       if (completedDomains.includes(d)) {
         btn.disabled = true;
-        btn.style.opacity = "0.45";
+        btn.style.opacity = "0.4";
         btn.title = "Already completed this session";
-        // Add green tick if not already there
-        if (!btn.querySelector(".domain-done-tick")) {
-          const tick = document.createElement("span");
-          tick.className = "domain-done-tick";
-          tick.innerHTML = "&#10004;";
-          tick.style.cssText = "position:absolute;top:8px;right:10px;font-size:1.3rem;color:#2E7D32;font-weight:900;line-height:1;";
-          btn.style.position = "relative";
-          btn.appendChild(tick);
-        }
       } else {
         btn.disabled = false;
         btn.style.opacity = "";
         btn.title = "";
-        // Remove tick if present (e.g. after reset)
-        const existingTick = btn.querySelector(".domain-done-tick");
-        if (existingTick) existingTick.remove();
       }
     });
 
@@ -629,6 +619,9 @@
       }
 
       if (caregiver) {
+        // Store caregiver_id in state so responses can reference it directly
+        resolvedCaregiverId = caregiver.caregiver_id;
+
         // Store caregiver ID on the cycle
         if (activeCycleId) {
           try {
@@ -653,6 +646,8 @@
             });
             if (childRes.ok) {
               const childData = await childRes.json();
+              // Store child_id in state so responses can reference it directly
+              resolvedChildId = childData.child_id;
               selectedChild = { child_id: childData.child_id, pet_name: guestChildName, date_of_birth: guestChildDob };
               // Update cycle with child_id
               if (activeCycleId) {
@@ -664,6 +659,10 @@
               }
             }
           } catch (_) {}
+        }
+        // If child already existed (returning user), store their ID too
+        if (selectedChild?.child_id && !selectedChild.child_id.startsWith("GUEST")) {
+          resolvedChildId = selectedChild.child_id;
         }
       }
     } catch (_) {}
@@ -686,11 +685,18 @@
 
       // If we have a real cycle ID, submit via API
       if (activeCycleId && !activeCycleId.startsWith("GUEST")) {
+        // Enrich each response with caregiver_id, child_id, answered_at
+        const enrichedPayload = payload.map(r => ({
+          ...r,
+          caregiver_id: resolvedCaregiverId || (authState.user?.caregiver_id) || "",
+          child_id:     resolvedChildId || selectedChild?.child_id || "",
+          answered_at:  new Date().toISOString(),
+        }));
         const r1 = await fetch(`/v1/cycles/${activeCycleId}/responses`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify(payload),
+          body: JSON.stringify(enrichedPayload),
         });
         if (!r1.ok) throw new Error("Failed to submit responses");
 
@@ -808,18 +814,15 @@
       let actionsHtml = "";
       if (actions && item.group !== "INCOMPLETE") {
         actionsHtml = `
-          <div class="action-plan-toggle" style="margin-top:14px;">
-            <button class="how-to-improve-btn" type="button">
-              <span class="hti-label">How To Improve</span>
-              <svg class="hti-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-            </button>
+          <div class="action-plan-toggle" style="margin-top:12px;">
+            <div class="action-plan-chip" style="display:inline-block;padding:4px 10px;background:rgba(107,79,160,0.1);border-radius:16px;color:var(--accent-primary);font-size:0.85rem;font-weight:600;cursor:pointer;">How To Improve ▼</div>
           </div>
-          <div class="action-plan-content hidden" style="margin-top:10px;font-size:0.9rem;color:var(--text-secondary);line-height:1.6;padding:10px 12px;background:rgba(107,79,160,0.05);border-radius:8px;border-left:3px solid var(--accent-primary);">${actions}</div>
+          <div class="action-plan-content hidden" style="margin-top:8px;font-size:0.9rem;color:var(--text-secondary);">${actions}</div>
         `;
       }
 
       const card = document.createElement("div");
-      card.className = "result-card expanded";
+      card.className = `result-card ${i === 0 && item.group !== "INCOMPLETE" ? "expanded" : ""}`;
       card.dataset.group = item.group;
       card.innerHTML = `
         <div class="result-card-header">
@@ -827,21 +830,20 @@
             <div class="result-domain" style="text-align:left;">${domainInfo.emoji} ${domainInfo.label}</div>
             <div class="result-group" style="text-align:left;color:${gs.color};font-weight:600;">${gs.icon ? gs.icon + " " : ""}${groupLabel}</div>
           </div>
-
+          <div class="result-chevron">▼</div>
         </div>
         <div class="result-card-body">
           <p class="result-explanation" style="font-weight:normal;font-size:0.95rem;margin:0;">${explanation}</p>
           ${actionsHtml}
         </div>
       `;
-      // card is always expanded — no click toggle
+      card.querySelector(".result-card-header").addEventListener("click", () => card.classList.toggle("expanded"));
       if (actions && item.group !== "INCOMPLETE") {
-        card.querySelector(".how-to-improve-btn").addEventListener("click", (e) => {
+        card.querySelector(".action-plan-chip").addEventListener("click", (e) => {
           e.stopPropagation();
-          const contentEl = card.querySelector(".action-plan-content");
-          const chevron   = card.querySelector(".hti-chevron");
-          const isHidden  = contentEl.classList.toggle("hidden");
-          chevron.style.transform = isHidden ? "rotate(0deg)" : "rotate(180deg)";
+          const content = card.querySelector(".action-plan-content");
+          content.classList.toggle("hidden");
+          e.target.textContent = content.classList.contains("hidden") ? "How To Improve ▼" : "How To Improve ▲";
         });
       }
       grid.appendChild(card);
