@@ -148,7 +148,17 @@
   }
 
   // ─── Navigation ───────────────────────────────────────────────────────────────
-  function switchView(viewName) {
+  // Views where browser back should stay on page (not exit app)
+  const INTERCEPT_VIEWS = new Set([
+    "child-info", "domain-choice", "observe", "results"
+  ]);
+  // Views where browser back should go to a specific parent view
+  const BACK_MAP = {
+    "child-info":    "caregiver-name",
+    "domain-choice": authState && authState.isLoggedIn ? "children" : "child-info",
+  };
+
+  function switchView(viewName, pushState = true) {
     $$(".view").forEach(v => v.classList.remove("active"));
     $$(".nav-link").forEach(l => l.classList.remove("active"));
     const v = $(`#view-${viewName}`);
@@ -157,6 +167,10 @@
     if (nl) nl.classList.add("active");
     currentView = viewName;
     window.scrollTo({ top: 0, behavior: "smooth" });
+    // Push history state so browser back can be intercepted
+    if (pushState) {
+      history.pushState({ view: viewName }, "", window.location.pathname);
+    }
   }
 
   // ─── Age Calculation ─────────────────────────────────────────────────────────
@@ -1015,6 +1029,35 @@
       launchDomainChoice(selectedChild);
     });
 
+    // ── Start New Observation (results page → full reset → dashboard) ──
+    const btnStartNew = $("#btn-start-new-observation");
+    if (btnStartNew) {
+      btnStartNew.addEventListener("click", () => {
+        // Full reset of all observation state
+        guestCaregiverName = "";
+        guestChildName = "";
+        guestChildDob = "";
+        completedDomains = [];
+        lastResults = [];
+        activeCycleId = null;
+        resolvedCaregiverId = null;
+        resolvedChildId = null;
+        selectedChild = null;
+        responses = {};
+        currentPromptIndex = 0;
+        chosenDomain = null;
+        if ($("#caregiver-name-input")) $("#caregiver-name-input").value = "";
+        if ($("#child-name-input")) $("#child-name-input").value = "";
+        if ($("#child-dob-input")) $("#child-dob-input").value = "";
+        if ($("#results-content")) $("#results-content").classList.add("hidden");
+        if (authState.isLoggedIn) {
+          loadChildren().then(() => switchView("children"));
+        } else {
+          switchView("dashboard");
+        }
+      });
+    }
+
     // ── Popup close buttons ──
     ["btn-close-acknowledged", "btn-close-acknowledged-btn"].forEach(id => {
       const el = $(`#${id}`);
@@ -1029,6 +1072,12 @@
     });
 
     // ── Children view ──
+    // ── My Children page logout button (secondary, in-page) ──
+    const btnChildrenLogout = $("#btn-children-page-logout");
+    if (btnChildrenLogout) {
+      btnChildrenLogout.addEventListener("click", handleLogout);
+    }
+
     $("#btn-show-add-child").addEventListener("click", () => { $("#add-child-form").classList.toggle("hidden"); });
     $("#btn-cancel-add-child").addEventListener("click", () => {
       $("#add-child-form").classList.add("hidden");
@@ -1088,6 +1137,49 @@
       doc.save(`${safeName}_ecd360_report_${new Date().toISOString().slice(0,10).replace(/-/g,"")}.pdf`);
     });
 
+    // ── Browser back button interception ──────────────────────────────────────
+    window.addEventListener("popstate", (e) => {
+      const view = e.state?.view || "dashboard";
+
+      // Screens where back should be completely blocked (stay on page)
+      const BLOCK_BACK = ["observe", "results"];
+      if (BLOCK_BACK.includes(currentView)) {
+        // Re-push so the history entry is restored (prevents exiting)
+        history.pushState({ view: currentView }, "", window.location.pathname);
+        return;
+      }
+
+      // Screens with defined parent — navigate back to parent
+      if (currentView === "child-info") {
+        switchView("caregiver-name");
+        return;
+      }
+      if (currentView === "domain-choice") {
+        if (authState.isLoggedIn) {
+          loadChildren().then(() => switchView("children"));
+        } else {
+          switchView("child-info");
+        }
+        return;
+      }
+      if (currentView === "auth") {
+        switchView("dashboard");
+        return;
+      }
+      if (currentView === "caregiver-name") {
+        switchView("dashboard");
+        return;
+      }
+      if (currentView === "children") {
+        // Logged-in users — back from My Children goes to dashboard
+        switchView("dashboard");
+        return;
+      }
+
+      // Default: go to dashboard
+      switchView("dashboard");
+    });
+
     // ── Dev autofill (Shift+1/2/3/4) ──
     document.addEventListener("keydown", (e) => {
       if (["INPUT","TEXTAREA","SELECT"].includes(e.target.tagName)) return;
@@ -1132,6 +1224,8 @@
     $("#nav-user-area").classList.add("hidden");
     await loadActionData();
     bindEvents();
+    // Seed initial history state so popstate has something to work with
+    history.replaceState({ view: "dashboard" }, "", window.location.pathname);
     await checkExistingSession();
   }
 

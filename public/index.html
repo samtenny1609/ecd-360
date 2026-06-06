@@ -216,7 +216,10 @@
         <h2>My Children</h2>
         <p class="page-subtitle" id="children-greeting"></p>
       </div>
-      <button class="btn btn-primary" id="btn-show-add-child">+ Add Child</button>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button class="btn btn-ghost" id="btn-children-page-logout" style="font-size:0.85rem;">Logout</button>
+        <button class="btn btn-primary" id="btn-show-add-child">+ Add Child</button>
+      </div>
     </div>
     <div id="add-child-form" class="add-child-card hidden">
       <h3>Add a New Child</h3>
@@ -373,10 +376,13 @@
         </button>
       </div>
 
-      <!-- Try another domain + Download — aligned with action buttons -->
+      <!-- Try another domain + Start New + Download — aligned -->
       <div class="results-action-buttons">
         <button class="btn btn-ghost results-action-btn" id="btn-try-another-domain">
           Try Another Domain
+        </button>
+        <button class="btn btn-ghost results-action-btn" id="btn-start-new-observation">
+          🏠 Start New Observation
         </button>
         <button class="btn btn-ghost results-action-btn" id="btn-download-report">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
